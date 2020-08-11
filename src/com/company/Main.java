@@ -16,6 +16,10 @@ public class Main {
 	    String text = "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Соньку в лоб, все - в сугроб."; // исходная текстовая строка
 	    TreeMap<Character, Integer> frequencies = countFrequency(text); // коллекция частотности
         ArrayList<CodeTreeNode> codeTreeNodes = new ArrayList<>(); // создаем список узлов для листов дерева
+        System.out.println("***********************************************************************");
+        System.out.print("Начальное время в миллисекундах = ");
+        System.out.println(System.currentTimeMillis());
+        System.out.println("***********************************************************************\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.println("ПРИМЕР РАБОТЫ АЛГОРИТМА НА МАЛЕНЬКОМ ТЕКСТЕ:");
         System.out.println("-----------------------------------------------------------------------");
         System.out.println("Исходный текст: \n" + text); // выводим исходный текст
@@ -47,6 +51,10 @@ public class Main {
         System.out.println("Текст после декомпрессии: \n" + decoded); // выводим расшифрованную строку
         System.out.println("-----------------------------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         fileCompressTest();
+        System.out.println("***********************************************************************\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.print("Конечное время в миллисекундах = ");
+        System.out.println(System.currentTimeMillis());
+        System.out.println("***********************************************************************");
     }
 
     /* Функция считающая сколько раз каждый символ встречается в тексте <Символ, Частота> */
@@ -71,6 +79,7 @@ public class Main {
         }
         return  codeTreeNodes.get(0); // возвращаем корневой узел который в итоге получился
     }
+
     /* Функция декодирующая строку с битами (строка с битами, кодовое дерево) */
     private static String huffmanDecode(String encoded, CodeTreeNode tree) {
         StringBuilder decoded = new StringBuilder(); // строка в которой накапливаем расшифрованные данные
