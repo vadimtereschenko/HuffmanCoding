@@ -13,9 +13,13 @@ public class Main {
 
     /* Главная функция */
     public static void main(String[] args) {
-	    /* String text = "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Соньку в лоб, все - в сугроб."; // исходная текстовая строка
+	    String text = "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Соньку в лоб, все - в сугроб."; // исходная текстовая строка
 	    TreeMap<Character, Integer> frequencies = countFrequency(text); // коллекция частотности
         ArrayList<CodeTreeNode> codeTreeNodes = new ArrayList<>(); // создаем список узлов для листов дерева
+        System.out.println("ПРИМЕР РАБОТЫ АЛГОРИТМА НА МАЛЕНЬКОМ ТЕКСТЕ:");
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("Исходный текст: \n" + text); // выводим исходный текст
+        System.out.println("-----------------------------------------------------------------------");
         System.out.println("Частотный анализ текста: ");
         System.out.println( frequencies ); // выводим частотный анализ текста
         System.out.println("-----------------------------------------------------------------------");
@@ -40,8 +44,8 @@ public class Main {
         System.out.println("Биты сжатой строки: \n" + encoded); // выводим биты сжатой строки
         System.out.println("-----------------------------------------------------------------------");
         String decoded = huffmanDecode(encoded.toString(), tree); // декодируем сжатую строку
-        System.out.println("Текст после декомпрессии: \n\n" + decoded); // выводим расшифрованную строку
-        System.out.println("-----------------------------------------------------------------------"); */
+        System.out.println("Текст после декомпрессии: \n" + decoded); // выводим расшифрованную строку
+        System.out.println("-----------------------------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         fileCompressTest();
     }
 
@@ -271,6 +275,7 @@ public class Main {
             CodeTreeNode tree2 = huffman(codeTreeNodes); // построение кодового дерева по листам
             String decoded = huffmanDecode(encoded2.toString(), tree2); // декодирование обратно исходной информации из сжатой
             Files.write(Paths.get("decompressed.txt"), decoded.getBytes()); // сохранение в файл декодированной информации
+            System.out.println("РАБОТА С БОЛЬШИМ ТЕКСТОМ:");
             System.out.println("-----------------------------------------------------------------------");
             System.out.println("Частотный анализ текста:");
             System.out.println( frequencies2 ); // выводим частотный анализ текста
