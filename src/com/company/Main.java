@@ -13,48 +13,8 @@ public class Main {
 
     /* Главная функция */
     public static void main(String[] args) {
-	    String text = "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Соньку в лоб, все - в сугроб."; // исходная текстовая строка
-	    TreeMap<Character, Integer> frequencies = countFrequency(text); // коллекция частотности
-        ArrayList<CodeTreeNode> codeTreeNodes = new ArrayList<>(); // создаем список узлов для листов дерева
-        System.out.println("***********************************************************************");
-        System.out.print("Начальное время в миллисекундах = ");
-        System.out.println(System.currentTimeMillis());
-        System.out.println("***********************************************************************\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("ПРИМЕР РАБОТЫ АЛГОРИТМА НА МАЛЕНЬКОМ ТЕКСТЕ:");
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("Исходный текст: \n" + text); // выводим исходный текст
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("Частотный анализ текста: ");
-        System.out.println( frequencies ); // выводим частотный анализ текста
-        System.out.println("-----------------------------------------------------------------------");
-        for (Character c: frequencies.keySet()) { // цикл по всем символам из таблицы
-            codeTreeNodes.add(new CodeTreeNode(c, frequencies.get(c))); // добавляем новый узел в список (символ и его частота)
-        }
-        CodeTreeNode tree = huffman(codeTreeNodes); // строим кодовое дерево из массива узлов с помощью алгоритма Хаффмана
-        TreeMap<Character, String> codes = new TreeMap<>(); // создаем коллекцию кодов
-        for(Character c: frequencies.keySet()) { // цикл по всем символам
-            codes.put(c, tree.getCodeForCharacter(c, "")); // добавлям для каждого символа его код
-        }
-        System.out.println("Таблица префиксных кодов: \n" + codes.toString()); // выводим таблицу префиксных кодов
-        System.out.println("-----------------------------------------------------------------------");
-        StringBuilder encoded = new StringBuilder(); // создаем строку содержащую сжатые биты
-        for (int i=0; i<text.length(); i++) { // цикл по строке
-            encoded.append(codes.get(text.charAt(i))); // код каждого символа записываем в строку содержащую сжатые биты
-        }
-        System.out.println("Размер исходной строки: \n" + text.getBytes().length * 8 + " бит"); // выводим размер исходной строки
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("Размер сжатой строки: \n" + encoded.length() + " бит"); // выводим размер сжатой строки
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("Биты сжатой строки: \n" + encoded); // выводим биты сжатой строки
-        System.out.println("-----------------------------------------------------------------------");
-        String decoded = huffmanDecode(encoded.toString(), tree); // декодируем сжатую строку
-        System.out.println("Текст после декомпрессии: \n" + decoded); // выводим расшифрованную строку
-        System.out.println("-----------------------------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         fileCompressTest();
-        System.out.println("***********************************************************************\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.print("Конечное время в миллисекундах = ");
-        System.out.println(System.currentTimeMillis());
-        System.out.println("***********************************************************************");
+        System.out.println("Done!..");
     }
 
     /* Функция считающая сколько раз каждый символ встречается в тексте <Символ, Частота> */
@@ -203,30 +163,18 @@ public class Main {
         }
     }
 
-    /* Функция сохранения таблицы частот и сжатой информации в файл */
-    private static void saveToFile(File output, Map<Character, Integer> frequencies, String bits) {
-        try {
-            DataOutputStream os = new DataOutputStream(new FileOutputStream(output)); // создаем поток вывода
-            os.writeInt(frequencies.size()); // записываем размер таблицы частот в поток вывода
-            for (Character character: frequencies.keySet()) { // цикл по таблице частот
-                os.writeChar(character); // записываем символ в поток
-                os.writeInt(frequencies.get(character)); // записываем в поток то сколько раз текущий символ встречается в тексте
-            }
-            int compressedSizeBits = bits.length(); // записываем в поток вывода размер зашифрованных данных в битах
-            BitArray bitArray = new BitArray(compressedSizeBits); // создаем массив битов
-            for (int i = 0; i < bits.length(); i++) {  // цикл по битам
-                bitArray.set(i, bits.charAt(i) != '0' ? 1 : 0); // записываем бит в массив битов
-            }
-            os.writeInt(compressedSizeBits); // записываем биты в поток вывода
-            os.write(bitArray.bytes, 0, bitArray.getSizeInBytes()); // записываем байты в поток вывода
-            os.flush(); // очищаем поток вывода
-            os.close(); // закрываем поток вывода
+    static int count = 0;
 
-        } catch (FileNotFoundException e) { // если ошибка
-            e.printStackTrace(); // выводим её
-        } catch (IOException e) { // если ошибка
-            e.printStackTrace(); // выводим её
+    /* Функция сохранения таблицы частот и сжатой информации в файл */
+    private static void saveToFile(DataOutputStream outputStream, String bits) throws IOException {
+        count++; // счетчик сохраненных в файл байтов
+        System.out.println("Происходит запись " + bits + " в файл");
+        System.out.println("Байтов записано: " + count);
+        BitArray bitArray = new BitArray(bits.length()); // создаем массив битов
+        for (int i = 0; i < bits.length(); i++) {  // цикл по битам
+            bitArray.set(i, bits.charAt(i) != '0' ? 1 : 0); // записываем бит в массив битов
         }
+        outputStream.write(bitArray.bytes, 0, bitArray.getSizeInBytes()); // записываем байты в поток вывода
     }
 
     /* загрузка сжатой информации и таблицы частот из файла */
@@ -246,11 +194,26 @@ public class Main {
                 bits.append(bitArray.get(i) != 0 ? "1" : 0); // записываем массив битов в строку битов
             }
 
-        } catch (FileNotFoundException e) { // если ошибка
-            e.printStackTrace(); // выводим её
-        } catch (IOException e) { // если ошибка
+        } catch (Exception e) { // если ошибка
             e.printStackTrace(); // выводим её
         }
+    }
+
+//    private static int getBitSize(String content, TreeMap<Character, String> codes) {
+//        StringBuilder tempBuilder = new StringBuilder(); // определяем временный стрингбилдер для размера бита
+//        for(int i = 0; i < content.length(); i++) { // проходим по всей строке
+//            tempBuilder.append(codes.get(content.charAt(i))); // записываем в переменную всю битовую строку
+//        }
+//        return tempBuilder.length(); // возвращаем её длину
+//    }
+
+    /* Геттер для размера битовой строки */
+    private static int getBitSize(String content, TreeMap<Character, String> codes) {
+        int contentLengthInBits = 0; // счетчик длинны
+        for(int i = 0; i < content.length(); i++) { // проходим по всей строке
+            contentLengthInBits += codes.get(content.charAt(i)).length(); // увеличивая счетчик
+        }
+        return contentLengthInBits; // возвращаем длинну строки
     }
 
     /* Проверка алгоритма сжатия на текстовом файле */
@@ -268,15 +231,46 @@ public class Main {
                 codes.put(c, tree.getCodeForCharacter(c, "")); // добавляем для каждого символа свой код
             }
             StringBuilder encoded = new StringBuilder(); // создаем строку содержащую сжатые биты
-            for (int i = 0; i < content.length(); i++) { // цикл по строке
-                encoded.append(codes.get(content.charAt(i))); // код каждого символа записываем в строку содержащую сжатые биты
-            }
             File file = new File("compressed.huf"); // обозначаем файл для сохранения информации
-            saveToFile(file, frequencies, encoded.toString()); // сохраняем информацию в файл
+            try {
+                DataOutputStream os = new DataOutputStream(new FileOutputStream(file)); // создаем поток вывода
+                os.writeInt(frequencies.size()); // записываем размер таблицы частот в поток вывода
+                for (Character character: frequencies.keySet()) { // цикл по таблице частот
+                    os.writeChar(character); // записываем символ в поток
+                    os.writeInt(frequencies.get(character)); // записываем в поток то сколько раз текущий символ встречается в тексте
+                }
+                os.writeInt(getBitSize(content, codes)); // записываем в файл размер строки
+                for (int i = 0; i < content.length(); i++) { // цикл по строке
+                    encoded.append(codes.get(content.charAt(i))); // код символа записываем в строку содержащую сжатые биты
+                    while(encoded.length() >= 8 || i == content.length() - 1) { // пока длина строки >= размеру байта, либо алгоритм находится на последнем символе
+                        String bitsToCompress; // определяем дополнительную переменную для записи в файл
+                        if(i == content.length() - 1) { // если мы на последнем символе
+                            bitsToCompress = encoded.toString(); // записываем его полностью
+                        } else { // если мы не на последнем символе
+                            bitsToCompress = encoded.toString().substring(0, 8); // в переменную для записи в файл записываем 8 бит (без хвоста)
+                        }
+                        saveToFile(os, bitsToCompress); // сохраняем 8 бит в файл
+                        if(i == content.length() - 1){ // если мы на последнем символе
+                            encoded.setLength(0); // очищаем переменную строки
+                            break; // заканчиваем
+                        }
+                        String tail = encoded.toString().substring(8); // запоминаем оставшийся хвост (если было больше 8 битов)
+                        encoded.setLength(0); // обнуляем переменную
+                        encoded.append(tail); // записываем в начало оставшийся хвост
+                    }
+                }
+                os.flush(); // очищаем поток вывода
+                os.close(); // закрываем поток вывода
+
+            } catch (Exception e) { // если ошибка
+                e.printStackTrace(); // выводим её
+            }
+
             TreeMap<Character, Integer> frequencies2 = new TreeMap<>(); // создаем таблицу частот из файла
             StringBuilder encoded2 = new StringBuilder(); // создаем строку содержащую сжатые биты
             codeTreeNodes.clear(); // очищаем список узлов для листа дерева
             loadFromFile(file, frequencies2, encoded2); // извлекаем сжатую информацию из файла
+
             /* Генерация листов и постоение кодового дерева Хаффмана на основе таблицы частот сжатого файла */
             for(Character c: frequencies2.keySet()) { // цикл по таблице частот
                 codeTreeNodes.add(new CodeTreeNode(c, frequencies2.get(c))); // построение листов по таблице частот
@@ -284,11 +278,6 @@ public class Main {
             CodeTreeNode tree2 = huffman(codeTreeNodes); // построение кодового дерева по листам
             String decoded = huffmanDecode(encoded2.toString(), tree2); // декодирование обратно исходной информации из сжатой
             Files.write(Paths.get("decompressed.txt"), decoded.getBytes()); // сохранение в файл декодированной информации
-            System.out.println("РАБОТА С БОЛЬШИМ ТЕКСТОМ:");
-            System.out.println("-----------------------------------------------------------------------");
-            System.out.println("Частотный анализ текста:");
-            System.out.println( frequencies2 ); // выводим частотный анализ текста
-            System.out.println("-----------------------------------------------------------------------");
         } catch (IOException e) { // если ошибка
             e.printStackTrace(); // выводим её
         }
